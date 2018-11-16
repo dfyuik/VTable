@@ -1,0 +1,69 @@
+// UI 规范统一在这里规范，定义颜色，等
+
+
+@bgcolor: #f7f6fb;
+@bluefontColor: #5c92e8;
+@partingColor: #ddd;
+//字体颜色
+@themeFontColor: #333333;
+@garyFontColor: #999;
+@whiteFontcolor: #fff;
+@channelFontColor: #666;
+@btnBgColor:#f7f7f7;
+@btnFontColor:#495060;
+// 颜色定义
+@warningColor:#E76E43;
+@successColor:#03C086;
+@bluefontColorHover:#5787D3;
+
+//flex布局
+.flexLayout(@justify:flex-start,@align:center,@direction:row) {
+  display: -webkit-box; /* 老版本语法: Safari, iOS, Android browser, older WebKit browsers. */
+  display: -moz-box; /* 老版本语法: Firefox (buggy) */
+  display: -ms-flexbox; /* 混合版本语法: IE 10 */
+  display: -webkit-flex; /* 新版本语法: Chrome 21+ */
+  display: flex; /* 新版本语法: Opera 12.1, Firefox 22+ */
+
+  justify-content: @justify;
+  -moz-box-pack: @justify;
+  -webkit-box-pack: @justify;
+  -ms-flex-pack: @justify;
+  -webkit-justify-content: @justify;
+  -moz-box-align: @align;
+  -webkit-box-align: @align;
+  -ms-flex-align: @align;
+  -webkit-align-items: @align;
+  align-items: @align;
+  flex-direction: @direction;
+}
+
+//清除浮动
+.clearfix() {
+  zoom: 1;
+  &:before,
+  &:after {
+    content: "";
+    display: table;
+  }
+  &:after {
+    clear: both;
+    visibility: hidden;
+    font-size: 0;
+    height: 0;
+  }
+}
+
+//按钮样式
+.saveBtnStyle() {
+  font-size: 12px;
+  height: 32px;
+  background-color: @bluefontColor;
+  color: @whiteFontcolor;
+}
+
+.CancelBtnStyle() {
+  font-size: 12px;
+  height: 32px;
+  background-color: @btnBgColor;
+  color: @btnFontColor;
+}
