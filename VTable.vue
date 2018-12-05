@@ -1,23 +1,27 @@
 <style lang="less">
-@import './VTable.less';
+    @import './VTable.less';
 </style>
 
 <template>
     <div class="VTable">
         <Row>
             <Col>
-            <Table :columns="init.cols" stripe ref="selection" @on-sort-change="toChangeSort" no-data-text="<i class='iconfont finleanCloud-wushuju'></i><p class='noData'>无数据</p>" @on-selection-change="onSelect" :data="tableData" :loading='showLoading'></Table>
+                <Table :columns="init.cols" stripe ref="selection" @on-sort-change="toChangeSort"
+                       no-data-text="<i class='iconfont finleanCloud-wushuju'></i><p class='noData'>无数据</p>"
+                       @on-selection-change="onSelect" :data="tableData" :loading='showLoading'></Table>
             </Col>
         </Row>
         <br>
         <Row type="flex" justify="space-between" v-if="pages">
             <Col style="color: #5c92e8;height: 32px;font-size: 14px; line-height: 32px;">
-            <span>共 {{ totleItems }} 条</span>
-            &nbsp;&nbsp;&nbsp;&nbsp;
-            <span v-if="showExportPower" @click="exportTable" style="cursor:pointer">全部导出</span>
+                <span>共 {{ totleItems }} 条</span>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <span v-if="showExportPower" @click="exportTable" style="cursor:pointer">全部导出</span>
             </Col>
             <Col>
-            <Page :total="totalPage" placement="top" :current="currentPage" :page-size='rows' show-sizer show-elevator :page-size-opts="pageSizeOpts" @on-change='changePage' @on-page-size-change="changePageNum"></Page>
+                <Page :total="totalPage" placement="top" :current="currentPage" :page-size='rows' show-sizer
+                      show-elevator :page-size-opts="pageSizeOpts" @on-change='changePage'
+                      @on-page-size-change="changePageNum"></Page>
             </Col>
         </Row>
     </div>
@@ -33,45 +37,39 @@
      * @prop {Boolean} pages 选填，是否需要分页,默认为true
      * 以下参数为Object中的配置项
      * @prop {String} url 必填，API方法名,表格会自动发送请求并自动渲染,例如:'fetchINSFOrderList'
-     * @prop {Array} cols 必填，表头，用法和iview的表格一致，可以使用render函数
+     * @prop {Array} cols 必填，列，用法和iview的表格一致，可以使用render函数
      * @prop {Object} defaultValue  选填，为表格开始渲染时需要传递的默认值（除了Page和rows之外的其他值）
      * @prop {Object} filt 选填，需要主动更新表格时使用，会带入filt的属性进行请求，使用watch监听
+     * @prop {Object} exportExcelUrl ,选填，两个属性：
+     *      URL：导出的API，
+     *      fileName：导出的文件名
+     * @prop {Object} exportPower,选填，控制导出权限
+     *      show：是否显示导出按钮，
+     *      btnId：权限的id
+     * @method getData 更新表格，参数传递defaultValue表明需要携带的参数
      **/
     /*
-        * 解释一下defaultValue和filt的区别：
-        * defaultValue为从第一次开始，每一次要发请求更新表格时需要带上的参数，例：pageSize（已经做过封装，此参数不需要做传递）
-        * 再比如，在先进行查询后进行翻页，因为翻页的内容是查询结果，所以翻页也需要带上查询条件，故需要使用defaultValue；
-        *
-        * filt为手动更新表格，类似于update的效果，由watch监听；
-        * ================Demo============================
-        * let obj = {}//假如这是筛选条件；
-        * 开始手动更新表格
-        * this.filt = obj;//这是错误的用法，这样会造成是会触发一次，当带条件进行翻页时，可能第二次会造成不会更新
-        * 正确的用法
-        * this.defaultValue = obj;
-        * this.filt = {...defaultValue};
-        *
-        * 2018-6-25
-        * 新增了表格自定义筛选的功能：
-        * 通过给需要筛选的列，设置sortKey来自定义排序的key，点击升序和降序的图标时会自动传递0和1来进行排序
-        *
-        * 2018-6-27
-        * 新增了导出权限的功能
-        * init下的exportExcelUrl为导出的Url
-        * exportExcelUrl:{
-        *   URL:''  导出的地址
-        *   fileName:''  导出的文件名
-        * }
-        * 在init中通过添加exportPower对象来进行判断，该对象有两个属性
-        * @prop show 是否显示导出功能
-        * @prop btnId 权限id
-        * 如果show为false，则不显示
-        * 如果show为true，则判断btnId是否传递，如果没有传递，则显示，如果传递则判断是否有权限显示，如果有，则显示
-        *
-        * */
+    *
+    * 2018-6-25
+    * 新增了表格自定义筛选的功能：
+    * 通过给需要筛选的列，设置sortKey来自定义排序的key，点击升序和降序的图标时会自动传递0和1来进行排序
+    *
+    * 2018-6-27
+    * 新增了导出权限的功能
+    * init下的exportExcelUrl为导出的Url
+    * exportExcelUrl:{
+    *   URL:''  导出的地址
+    *   fileName:''  导出的文件名
+    * }
+    * 在init中通过添加exportPower对象来进行判断，该对象有两个属性
+    * @prop show 是否显示导出功能
+    * @prop btnId 权限id
+    * 如果show为false，则不显示
+    * 如果show为true，则判断btnId是否传递，如果没有传递，则显示，如果传递则判断是否有权限显示，如果有，则显示
+    *
+    * */
     import api from '../../api/api';
     import codeManage from '@/api/statusCodeManage';
-    import dateFmt from '@/tool/date';
     import downloadUrl from '@/api/excelDownLoadConfig';
 
     export default {
@@ -126,7 +124,7 @@
         methods: {
             exportTable() {
                 if (!this.tableData.length) {
-                    this.$Notice.error({ title: '当前无数据导出！' });
+                    this.$Notice.error({title: '当前无数据导出！'});
                     return;
                 }
                 if (!this.init.hasOwnProperty('exportExcelUrl')) {
@@ -144,12 +142,12 @@
                     throw 'you have to set url as the interface for excel download';
                     return;
                 }
-                let params = { ...this.init.exportExcelUrl };
+                let params = {...this.init.exportExcelUrl};
                 let _url = params.url.split('.');
                 if (!params.hasOwnProperty('fileName')) {
                     params.fileName = '';
                 }
-                api[_url[0]][_url[1]]({ ...this.defaultValue }).then(
+                api[_url[0]][_url[1]]({...this.defaultValue}).then(
                     res => {
                         downloadUrl.configDate(res, params.fileName);
                     },
@@ -208,7 +206,7 @@
                 // params.sortType = this.sortType;
                 //main function
                 let _url = this.init.url.split('.');
-                api[_url[0]][_url[1]]({ ...params }).then(
+                api[_url[0]][_url[1]]({...params}).then(
                     res => {
                         this.totalPage = res.body.total;
                         this.pageSize = res.body.rows;
