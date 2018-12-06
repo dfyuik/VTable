@@ -6,8 +6,6 @@
 
 [![](https://img.shields.io/travis/iview/iview.svg?style=flat-square)](https://github.com/imRz1015/VTable)
 [![iView](https://img.shields.io/npm/v/iview.svg?style=flat-square)](https://www.npmjs.org/package/iview)
-[![Vue](http://img.shields.io/npm/dm/iview.svg?style=flat-square)](https://cn.vuejs.org/)
-[![NPM downloads](https://img.shields.io/npm/dt/iview.svg?style=flat-square)](https://npmjs.org/package/iview)
 
 
 # VTable
