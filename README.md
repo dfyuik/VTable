@@ -1,4 +1,4 @@
-<div style="text-align:center;">
+<div align=center>
   <a href="https://github.com/imRz1015/VTable">
     <img src="./vtable_bg.png" alt="logo">
   </a>
