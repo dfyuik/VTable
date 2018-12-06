@@ -71,10 +71,14 @@
     import api from '../../api/api';
     import codeManage from '@/api/statusCodeManage';
     import downloadUrl from '@/api/excelDownLoadConfig';
+    import table from './table-components/table.vue'
 
     export default {
         name: 'VTable',
         //        props: ['init', 'pages', 'filt', 'defaultValue', 'rows'],
+        components:{
+            table
+        },
         props: {
             init: {
                 type: Object,
