@@ -1,7 +1,9 @@
+<div style="text-align:center;">
+  <a href="https://github.com/imRz1015/VTable">
+    <img src="./vtable_bg.png" alt="logo">
+  </a>
+</div>
 
-<a href="https://github.com/imRz1015/VTable">
-  <img src="./vtable_bg.png" alt="logo">
-</a>
 
 # VTable
 一个基于Vue和iView的，为后台系统服务的功能集成组件
